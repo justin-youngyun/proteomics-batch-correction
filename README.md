@@ -32,6 +32,9 @@ The tool produces and keeps both:
 
 Matrix B keeps the same shape, proteins, and samples as Matrix A.
 
+The downstream differential-expression and enrichment analysis that takes Matrix A
+is in [proteomics-pipeline](https://github.com/justin-youngyun/proteomics-pipeline).
+
 ## The five methods
 
 All of them run per stratum (for example per tissue or region) and share the
