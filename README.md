@@ -1,41 +1,22 @@
 # proteomics-batch-correction
 
 A tool for correcting batch effects in a protein-by-sample abundance matrix
-when some subjects were re-run across batches as bridge replicates. I use it to
-decide which correction method to trust on a given dataset instead of picking
-one by habit, and to keep the corrected matrix separate from the matrix I hand
-to differential expression.
-
-## The idea
-
-When a study is measured across several batches, batch is confounded with
-whatever else changed between runs. If the same biological sample is measured in
-more than one batch (a bridge replicate), then any difference between its
-copies is batch effect and nothing else. That gives a ground truth: a good
-correction pulls a subject's bridge replicates back together without flattening
-the real differences between biological groups.
+when some subjects were re-run across batches as bridge replicates.
 
 It runs several correction methods behind one interface, scores each one
 against the bridge replicates with a fixed set of QC metrics, and either
 auto-selects the winner or runs a fixed default in production.
 
-## Two matrices, kept apart
+The tool produces two matricies:
 
-The tool produces and keeps both:
-
-- **Matrix A**, uncorrected (only median-normalized). This is what goes into
-  differential expression, where batch belongs in the model as a covariate.
-  Correcting the abundances first and then also modelling batch would count it
-  twice.
-- **Matrix B**, corrected. This is for the things you cannot put a batch term
-  into: PCA, clustering, heatmaps, and QC.
-
+- **Matrix A**, uncorrected (only median-normalized). 
+- **Matrix B**, corrected. 
 Matrix B keeps the same shape, proteins, and samples as Matrix A.
 
 The downstream differential-expression and enrichment analysis that takes Matrix A
 is in [proteomics-pipeline](https://github.com/justin-youngyun/proteomics-pipeline).
 
-## The five methods
+## Five methods
 
 All of them run per stratum (for example per tissue or region) and share the
 signature `correct(X, meta, ref_batch) -> X_corrected`.
